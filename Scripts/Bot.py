@@ -52,7 +52,7 @@ def main():
     application.bot.set_webhook(webhook_url)
 
     # Lắng nghe trên cổng đúng
-    port = int(os.getenv("PORT", 5000))
+    port = int(os.getenv("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
 
 if __name__ == "__main__":
