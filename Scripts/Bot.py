@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 import requests
+import asyncio
 
 # ID của ứng dụng trên Google Play
 APP_ID = "com.ducminh.tripple.match.finding"
@@ -28,14 +29,19 @@ def main():
     TOKEN = "7776250755:AAHpBGunt0Mz1o7RwnJtdCw5sXtakp8l9xw"
 
     # Tạo Application
+    global application
     application = Application.builder().token(TOKEN).build()
 
     # Đăng ký lệnh
     application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("check", check))  # Tự động kiểm tra trạng thái
+    application.add_handler(CommandHandler("check", check))
 
-    # Chạy bot
-    application.run_polling()
+    # Chạy bot trong event loop mới
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(application.initialize())  # Khởi tạo bot
+    loop.run_until_complete(application.start())  # Bắt đầu chạy bot
+    loop.run_forever()  # Giữ event loop hoạt động
 
 if __name__ == "__main__":
     main()
